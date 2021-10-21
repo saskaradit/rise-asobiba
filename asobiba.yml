@@ -1,0 +1,19 @@
+
+---
+- hosts: localhost
+  vars:
+    node_port: 8081
+    container_port: 8080
+    image_name: app-name
+    image_tag: 0.0.1
+    mount_volume: /path
+    mountpoint: /point
+  tasks:
+  - name: Run container
+    community.docker.docker_container:
+      name: "{{ image_name }}"
+      state: present
+      image: "asia.gcr.io/rise-prod-327008/{{ image_name }}:{{image_tag}}"
+      ports: "{{node_port}}:{{container_port}}"
+      volumes:
+            - "{{mount_volume}}:/{{mountpoint}}"
