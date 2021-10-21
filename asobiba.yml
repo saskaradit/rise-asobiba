@@ -9,10 +9,16 @@
     mount_volume: /path
     mountpoint: /point
   tasks:
+  - name: Gcloud Configure Docker
+    shell: "gcloud --quiet auth configure-docker"
+  - name: pull an image
+    docker_image:
+      name: asia.gcr.io/rise-prod-327008/{{ image_name }}:{{image_tag}}
   - name: Run container
     community.docker.docker_container:
       name: "{{ image_name }}"
-      state: present
+      state: started
+      restart: yes
       image: "asia.gcr.io/rise-prod-327008/{{ image_name }}:{{image_tag}}"
       ports: "{{node_port}}:{{container_port}}"
       volumes:
