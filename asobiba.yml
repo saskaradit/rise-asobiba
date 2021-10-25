@@ -57,8 +57,8 @@
     when: "(pip_version_output is failed) or not pip_version_output.stdout is search('pip ' + pip_version)"
     args:
       chdir: /tmp
-  - name: Install multi python packages with version specifiers
-    pip:
+  - name: Install python3
+    apt:
       name:
         - docker-py
         - docker
