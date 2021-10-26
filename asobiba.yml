@@ -7,7 +7,6 @@
     image_name: app-name
     image_tag: 0.0.1
     mount_volume: /path
-    mountpoint: /point
     pip_version: "9.0.*"
   tasks:
   - name: check alt python version
@@ -74,5 +73,4 @@
       restart: yes
       image: "asia.gcr.io/rise-prod-327008/{{ image_name }}:{{image_tag}}"
       ports: "{{node_port}}:{{container_port}}"
-      volumes:
-            - "{{mount_volume}}:/{{mountpoint}}"
+      volumes: "{{mount_volume}}"
