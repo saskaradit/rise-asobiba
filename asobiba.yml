@@ -1,103 +1,26 @@
-
 ---
-- hosts: localhost
-  vars:
-    node_port: 8081
-    container_port: 8080
-    image_name: app-name
-    image_tag: 0.0.1
-    mount_volume: ["mysql-db:/tmp","psql:/opt"]
-    pip_version: "9.0.*"
+- hosts: all
+  become_user: apps_user
+  become: yes
   tasks:
-  - name: check alt python version
-    become: yes
-    become_user: apps_user
-    shell: python3 --version
-    register: python3_version
-    ignore_errors: yes  # If not installed
-    tags:
-      - python-alt
-  - name: Install python3
-    become: yes
-    become_user: apps_user
+  - name: Install python3-pip
     apt:
-      name: build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
-      state: present
-    when: python3_version['stderr'] != 'Python 3.*'
-  - name: Download python3
-    become: yes
-    become_user: apps_user
-    ansible.builtin.unarchive:
-      src: https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tar.xz
-      dest: /usr/local/bin
-      remote_src: yes
-    when: python3_version['stderr'] != 'Python 3.*'
-  - name: Make python3
-    become: yes
-    become_user: apps_user
-    ansible.builtin.shell: make
-    when: python3_version['stderr'] != 'Python 3.*'
-  - name: Make python3
-    become: yes
-    become_user: apps_user
-    ansible.builtin.shell: make altinstall
-    when: python3_version['stderr'] != 'Python 3.*'
-  - name: configure python3
-    become: yes
-    become_user: apps_user
-    ansible.builtin.script: ./usr/local/bin/configure --enable-optimizations
-    when: python3_version['stderr'] != 'Python 3.*'
-
-  - name: Get installed pip version
-    become: yes
-    become_user: apps_user
-    command: "pip --version"
-    register: pip_version_output
-    ignore_errors: yes
-    changed_when: false
-  - name: Download get-pip.py
-    become: yes
-    become_user: apps_user
-    vars:
-        pip_version_url: "latest"
-        required_vars:
-            - pip_get_pip_version
-    get_url:
-        url: 'https://bootstrap.pypa.io/pip/{{ pip_version_url }}/get-pip.py'
-        dest: /tmp/get-pip.py
-    when: (pip_version_output is failed) or not pip_version_output.stdout is search(pip_version)
-  # Install pip if it's not already installed
-  - name: Install pip
-    become: yes
-    become_user: apps_user
-    command: "{{ ansible_python_interpreter if ansible_python_interpreter is defined else 'python' }} get-pip.py pip=={{ pip_version }}"
-    when: "(pip_version_output is failed) or not pip_version_output.stdout is search('pip ' + pip_version)"
-    args:
-      chdir: /tmp
-  - name: Install python3
-    become: yes
-    become_user: apps_user
-    apt:
-      name:
-        - docker-py
-        - docker
+      pkg:
+        - python3-pip
+        - python3-docker
   - name: Gcloud Configure Docker
     become: yes
     become_user: apps_user
     shell: "gcloud --quiet auth configure-docker"
   - name: pull an image
-    become: yes
-    become_user: apps_user
     docker_image:
       name: asia.gcr.io/rise-prod-327008/{{ image_name }}:{{image_tag}}
-  - name: create directory if they don't exist
-    become: yes
-    become_user: apps_user
+  - name: Create directory mount if they don't exist
     file:
       path: "{{  item.split(\":\")[0] | lower }}"
       state: directory
       owner: app_user
-      mode: 0775
+      mode: 0755
     loop: "{{mount_volume}}"
   - name: Run container
     become: yes
