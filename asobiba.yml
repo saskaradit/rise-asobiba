@@ -12,7 +12,7 @@
     shell: "gcloud --quiet auth configure-docker"
   - name: pull an image
     docker_image:
-      name: {{ image_name }}:{{image_tag}}
+      name: "{{ image_name }}:{{image_tag}}"
       repository: asia.gcr.io/rise-prod-327008
       source: pull
   - name: Create directory mount if they don't exist
