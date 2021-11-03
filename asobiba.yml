@@ -8,7 +8,6 @@
         - python3-pip
         - python3-docker
   - name: Gcloud Configure Docker
-    become: yes
     shell: "gcloud --quiet auth configure-docker"
   - name: pull an image
     docker_image:
