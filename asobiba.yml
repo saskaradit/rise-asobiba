@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: archimonde-1.rise-jkt.cld
   become_user: apps_user
   become: yes
   tasks:
