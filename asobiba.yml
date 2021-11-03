@@ -9,11 +9,6 @@
         - python3-docker
   - name: Gcloud Configure Docker
     shell: "gcloud --quiet auth configure-docker"
-  - name: pull an image
-    docker_image:
-      name: "{{ image_name }}:{{image_tag}}"
-      repository: asia.gcr.io/rise-prod-327008
-      source: pull
   - name: Create directory mount if they don't exist
     file:
       path: "{{  item.split(\":\")[0] | lower }}"
@@ -23,7 +18,7 @@
     loop: "{{mount_volume}}"
   - name: Run container
     community.general.docker_container:
-      image: "{{ image_name }}:{{image_tag}}"
+      image: "asia.gcr.io/rise-prod-327008/{{ image_name }}:{{image_tag}}"
       name: ebisu
       state: started
       ports: "{{node_port}}:{{container_port}}"
