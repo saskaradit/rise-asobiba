@@ -9,7 +9,5 @@
         - default-jdk
   - name: Creating a file with content
     template: src=java.service.j2 dest=/etc/systemd/system/{{app_name}}.service mode=644
-    notify:
-      - reload systemctl
   - name: JavaApp | Start JavaApp
     service: name={{app_name}}.service state=started enabled=yes
