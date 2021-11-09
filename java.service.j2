@@ -3,7 +3,7 @@ Description=Manage Java service
 
 [Service]
 WorkingDirectory=/opt/prod
-ExecStart=/bin/java {{java_param}} -jar {{ app_name }}-v{{ app_version }}.jar
+ExecStart=/bin/java {{java_param}} -jar {{ app_name }}/{{ app_name }}-v{{ app_version }}.jar
 User=jvmapps
 Type=simple
 Restart=on-failure
