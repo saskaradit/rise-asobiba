@@ -13,6 +13,3 @@
       - reload systemctl
   - name: JavaApp | Start JavaApp
     service: name={{app_name}}.service state=started enabled=yes
-
-
-#  ansible-playbook asobiba.yml -e '{"app-name":"hehe", "app-version":"12", "java-param":"testing purposes" }'
