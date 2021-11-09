@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Install java
+    apt:
+      pkg:
+        - default-jre
+        - default-jdk
+  - name: Creating a file with content
+    template: src=java.service.j2 dest=/etc/systemd/system/{{app_name}}.service mode=644
+    notify:
+      - reload systemctl
+  - name: JavaApp | Start JavaApp
+    service: name={{app_name}}.service state=started enabled=yes
+
+
+#  ansible-playbook asobiba.yml -e '{"app-name":"hehe", "app-version":"12", "java-param":"testing purposes" }'

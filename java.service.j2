@@ -1,0 +1,13 @@
+[Unit]
+Description=Manage Java service
+
+[Service]
+WorkingDirectory=/opt/prod
+ExecStart=/bin/java {{java_param}} -jar {{ app_name }}-v{{ app_version }}.jar
+User=jvmapps
+Type=simple
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
