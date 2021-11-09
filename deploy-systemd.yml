@@ -8,8 +8,8 @@
         - openjdk-11-jre
         - openjdk-11-jdk
   - name: Creating a file with content
-    become: apps_user
+    become_user: apps_user
     template: src=java.service.j2 dest=/etc/systemd/system/{{app_name}}.service mode=644
   - name: JavaApp | Start JavaApp
-    become: apps_user
+    become_user: apps_user
     service: name={{app_name}}.service state=started enabled=yes
