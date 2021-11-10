@@ -34,9 +34,9 @@
     become: true
     ansible.builtin.template:
       src: java.service.j2
-      dest: /opt/{{app_name}}/pid/{{app_name}}.service
+      dest: /etc/systemd/system/{{app_name}}.service
       owner: apps_user
       mode: 0755
   - name: Start JavaApp
     become: true
-    service: name=/opt/{{app_name}}/pid/{{app_name}}.service state=started enabled=yes
+    service: name={{app_name}}.service state=started
