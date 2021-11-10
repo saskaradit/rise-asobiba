@@ -22,7 +22,7 @@
       - /opt/{{app_name}}/config
   - name: Move jar to bin
     become_user: apps_user
-    command: mv /tmp/{{ app_name }}-v{{ app_version }}.jar /opt/{{app_name}}/bin
+    command: mv /tmp/*.jar /opt/{{app_name}}/bin/{{ app_name }}-v{{ app_version }}.jar
   - name: Creating a file with content
     become_user: apps_user
     template: src=java.service.j2 dest=/opt/{{app_name}}/pid/{{app_name}}.service mode=644
