@@ -37,10 +37,6 @@
       dest: /opt/{{app_name}}/pid/{{app_name}}.service
       owner: apps_user
       mode: 0755
-  - name: check files
-    shell: "ls -la /opt/{{app_name}}/pid"
-    register: out
-  - debug: var=out.stdout_lines
   - name: Start JavaApp
-    become_user: apps_user
+    become: true
     service: name=/opt/{{app_name}}/pid/{{app_name}}.service state=started enabled=yes
