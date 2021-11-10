@@ -21,18 +21,26 @@
       - /opt/{{app_name}}/config
   - name: check files
     shell: "ls -la /opt/{{app_name}}"
+    register: hello
+  - debug: var=hello.stdout_lines
   - name: copy jar 
+    become: true
     copy:
       src: /tmp/{{ app_name }}-v{{ app_version }}.jar
       dest: /opt/{{app_name}}/bin/{{ app_name }}-v{{ app_version }}.jar
       owner: apps_user     
       mode: 0755
   - name: Creating a service file
+    become: true
     ansible.builtin.template:
       src: java.service.j2
       dest: /opt/{{app_name}}/pid/{{app_name}}.service
       owner: apps_user
       mode: 0755
+  - name: check files
+    shell: "ls -la /opt/{{app_name}}/pid"
+    register: out
+  - debug: var=out.stdout_lines
   - name: Start JavaApp
     become_user: apps_user
     service: name=/opt/{{app_name}}/pid/{{app_name}}.service state=started enabled=yes
