@@ -14,11 +14,14 @@
       owner: apps_user
       mode: 0755
     loop:
+      - /opt/{{app_name}}
+      - /opt/{{app_name}}/bin
       - /opt/{{app_name}}/log
       - /opt/{{app_name}}/pid
       - /opt/{{app_name}}/config
   - name: Move jar to bin
-    command: mv /opt/{{app_name}}/*.jar /opt/{{app_name}}/bin
+    become_user: apps_user
+    command: mv ${{ inputs.app-name }}/{{ app_name }}-v{{ app_version }}.jar /opt/{{app_name}}/bin
   - name: Creating a file with content
     become_user: apps_user
     template: src=java.service.j2 dest=/opt/{{app_name}}/pid/{{app_name}}.service mode=644
