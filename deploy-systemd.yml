@@ -19,13 +19,14 @@
       - /opt/{{app_name}}/log
       - /opt/{{app_name}}/pid
       - /opt/{{app_name}}/config
-  - name: copy jar
-    become: true 
+  - name: copy jar 
     copy:
       src: /tmp/{{ app_name }}-v{{ app_version }}.jar
       dest: /opt/{{app_name}}/bin/{{ app_name }}-v{{ app_version }}.jar
       owner: apps_user     
       mode: '0755'
+  - name: Debug
+    shell: "ls -la /opt/{{app_name}}"
   - name: Creating a service file
     ansible.builtin.template:
       src: java.service.j2
