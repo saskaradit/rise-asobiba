@@ -20,8 +20,7 @@
       - /opt/{{app_name}}/log
       - /opt/{{app_name}}/pid
       - /opt/{{app_name}}/config
-  - name: Ansible Copy Example Local to Remote
-  - name: copying file with playbook
+  - name: copy jar
     become: true 
     copy:
       src: /tmp/{{ app_name }}-v{{ app_version }}.jar
