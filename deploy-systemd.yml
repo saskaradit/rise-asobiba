@@ -7,9 +7,19 @@
       pkg:
         - openjdk-11-jre
         - openjdk-11-jdk
+  - name: Create directory if they don't exist
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: apps_user
+      mode: 0755
+    loop:
+      - /opt/{{app_name}}/log
+      - /opt/{{app_name}}/pid
+      - /opt/{{app_name}}/config
   - name: Creating a file with content
     become_user: apps_user
-    template: src=java.service.j2 dest=/etc/systemd/system/{{app_name}}.service mode=644
-  - name: JavaApp | Start JavaApp
+    template: src=java.service.j2 dest=/opt/{{app_name}}/pid/{{app_name}}.service mode=644
+  - name: Start JavaApp
     become_user: apps_user
-    service: name={{app_name}}.service state=started enabled=yes
+    service: name=/opt/{{app_name}}/pid/{{app_name}}.service state=started enabled=yes
