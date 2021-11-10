@@ -20,9 +20,14 @@
       - /opt/{{app_name}}/log
       - /opt/{{app_name}}/pid
       - /opt/{{app_name}}/config
-  - name: Move jar to bin
-    become_user: apps_user
-    command: mv /tmp/*.jar /opt/{{app_name}}/bin/{{ app_name }}-v{{ app_version }}.jar
+  - name: Ansible Copy Example Local to Remote
+  - name: copying file with playbook
+    become: true 
+    copy:
+      src: /tmp/{{ app_name }}-v{{ app_version }}.jar
+      dest: /opt/{{app_name}}/bin/{{ app_name }}-v{{ app_version }}.jar
+      owner: apps_user     
+      mode: 0755
   - name: Creating a file with content
     become_user: apps_user
     template: src=java.service.j2 dest=/opt/{{app_name}}/pid/{{app_name}}.service mode=644
