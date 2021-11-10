@@ -28,7 +28,7 @@
       owner: apps_user     
       mode: 0755
   - name: Creating a file with content
-    become_user: apps_user
+    become: true 
     template: src=java.service.j2 dest=/opt/{{app_name}}/pid/{{app_name}}.service mode=644
   - name: Start JavaApp
     become_user: apps_user
