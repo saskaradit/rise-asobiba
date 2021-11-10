@@ -12,7 +12,7 @@
       path: "{{ item }}"
       state: directory
       owner: apps_user
-      mode: 0755
+      mode: '0755'
     loop:
       - /opt/{{app_name}}
       - /opt/{{app_name}}/bin
@@ -25,10 +25,13 @@
       src: /tmp/{{ app_name }}-v{{ app_version }}.jar
       dest: /opt/{{app_name}}/bin/{{ app_name }}-v{{ app_version }}.jar
       owner: apps_user     
-      mode: 0755
-  - name: Creating a file with content
-    become: true
-    template: src=java.service.j2 dest=/opt/{{app_name}}/pid/{{app_name}}.service mode=744 owner=apps_user
+      mode: '0755'
+  - name: Creating a service file
+    ansible.builtin.template:
+      src: java.service.j2
+      dest: /opt/{{app_name}}/pid/{{app_name}}.service
+      owner: apps_user
+      mode: '0744'
   - name: Start JavaApp
     become_user: apps_user
     service: name=/opt/{{app_name}}/pid/{{app_name}}.service state=started enabled=yes
